@@ -1,0 +1,12 @@
+# pvc-opendata.yaml
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: pvc-opendata
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      # check size!
+      storage: 10Gi

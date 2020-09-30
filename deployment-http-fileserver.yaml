@@ -1,0 +1,32 @@
+# deployment-http-fileserver.yaml
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  labels:
+    service: http-fileserver
+  name: http-fileserver
+spec:
+  replicas: 1
+  strategy: {}
+  template:
+    metadata:
+      labels:
+        service: http-fileserver
+    spec:
+      volumes:
+      - name: volume-output
+        persistentVolumeClaim:
+          claimName: pvc-output
+      - name: basic-config
+        configMap:
+          name: basic-config
+      containers:
+      - name: file-storage-container
+        image: nginx
+        ports:
+        - containerPort: 80
+        volumeMounts:
+          - mountPath: "/usr/share/nginx/html"
+            name: volume-output
+          - name: basic-config
+            mountPath: /etc/nginx/conf.d

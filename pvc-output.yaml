@@ -1,0 +1,12 @@
+# pvc-output.yaml
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: pvc-output
+spec:
+  accessModes:
+    - ReadWriteMany
+  resources:
+    requests:
+      # check size!
+      storage: 1Gi

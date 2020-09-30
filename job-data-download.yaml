@@ -1,0 +1,22 @@
+# job-data-download.yaml
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: job-data-download
+spec:
+  backoffLimit: 2
+  ttlSecondsAfterFinished: 100
+  template:
+    spec:
+      volumes:
+        - name: volume-opendata
+          persistentVolumeClaim:
+            claimName: pvc-opendata
+      containers:
+        - name: pod-data-download
+          image: clelange/cernopendata-client-go
+          args: ["download", "-r", "123", "-o", "/opendata"]
+          volumeMounts:
+            - mountPath: "/opendata/"
+              name: volume-opendata
+      restartPolicy: Never

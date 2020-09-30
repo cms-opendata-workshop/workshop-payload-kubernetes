@@ -1,0 +1,15 @@
+# job-data-list.yaml
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: job-data-download
+spec:
+  backoffLimit: 2
+  ttlSecondsAfterFinished: 100
+  template:
+    spec:
+      containers:
+        - name: pod-data-download
+          image: clelange/cernopendata-client-go
+          args: ["list", "-r", "123"]
+      restartPolicy: Never
