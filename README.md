@@ -55,6 +55,6 @@ Then check service `http-fileserver` to see if it got a public IP and open addre
 curl -sLO https://github.com/argoproj/argo/releases/download/v2.11.1/argo-linux-amd64.gz
 gunzip argo-linux-amd64.gz
 chmod +x argo-linux-amd64
-mv argo-linux-amd64 argo
+sudo mv argo-linux-amd64 /usr/local/bin/argo
 kubectl create clusterrolebinding cms-cluster-admin-binding --clusterrole=cluster-admin --user=cms-g001@arkivum.com
 ```
