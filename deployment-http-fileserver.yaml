@@ -16,7 +16,7 @@ spec:
       volumes:
       - name: volume-output
         persistentVolumeClaim:
-          claimName: pvc-output
+          claimName: nfs-<NUMBER>
       - name: basic-config
         configMap:
           name: basic-config
