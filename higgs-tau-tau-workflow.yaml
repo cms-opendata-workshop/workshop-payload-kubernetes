@@ -36,7 +36,7 @@ spec:
   volumes:
   - name: task-pv-storage
     persistentVolumeClaim:
-      claimName: pvc-demo
+      claimName: nfs-<NUMBER>
   templates:
   - name: parallel-worker
     inputs:
@@ -45,7 +45,6 @@ spec:
       - name: histogram-list
     dag:
       tasks:
-
       - name: skim-step
         template: skim-template
         arguments:
@@ -55,7 +54,6 @@ spec:
           - name: x-section
             value: "{{item.x-section}}"
         withParam: "{{inputs.parameters.files-list}}"
-
       - name: histogram-step
         dependencies: [skim-step]
         template: histogram-template
@@ -85,10 +83,9 @@ spec:
       - name: file
       - name: x-section
     script:
-      image: alintulu/root:higgstautau-compiled
+      image: gcr.io/cern-cms/root-conda-002:higgstautau
       command: [sh]
       source: |
-        cd /payload-master
         LUMI=11467.0 # Integrated luminosity of the unscaled dataset
         SCALE=0.1 # Same fraction as used to down-size the analysis
         mkdir -p $HOME/skimm
@@ -111,10 +108,9 @@ spec:
       - name: file
       - name: process
     script:
-      image: alintulu/root:higgstautau-compiled
+      image: gcr.io/cern-cms/root-conda-002:higgstautau
       command: [sh]
       source: |
-        cd /payload-master
         mkdir -p $HOME/histogram
         python histograms.py /mnt/vol/{{inputs.parameters.file}}-skimmed.root {{inputs.parameters.process}} $HOME/histogram/{{inputs.parameters.file}}-histogram-{{inputs.parameters.process}}.root
         ls -l $HOME/histogram
@@ -131,10 +127,9 @@ spec:
 
   - name: merge-template
     script:
-      image: alintulu/root:higgstautau-compiled
+      image: gcr.io/cern-cms/root-conda-002:higgstautau
       command: [sh]
       source: |
-        cd /payload-master
         hadd -f /mnt/vol/histogram.root /mnt/vol/*-histogram-*.root
         ls -l /mnt/vol
       volumeMounts:
@@ -149,10 +144,9 @@ spec:
 
   - name: plot-template
     script:
-      image: alintulu/root:higgstautau-compiled
+      image: gcr.io/cern-cms/root-conda-002:higgstautau
       command: [sh]
       source: |
-        cd /payload-master
         SCALE=0.1
         python plot.py /mnt/vol/histogram.root /mnt/vol $SCALE
         ls -l /mnt/vol
@@ -162,12 +156,11 @@ spec:
 
   - name: fit-template
     script:
-      image: alintulu/root:higgstautau-compiled
+      image: gcr.io/cern-cms/root-conda-002:higgstautau
       command: [sh]
       source: |
-        cd /payload-master
         python fit.py /mnt/vol/histogram.root /mnt/vol
         ls -l /mnt/vol
       volumeMounts:
       - name: task-pv-storage
-
+        mountPath: /mnt/vol
