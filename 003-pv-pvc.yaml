@@ -15,8 +15,7 @@ spec:
 kind: PersistentVolumeClaim
 apiVersion: v1
 metadata:
-  name: nfs
-  namespace: argo
+  name: nfs-<NUMBER>
 spec:
   accessModes:
     - ReadWriteMany
