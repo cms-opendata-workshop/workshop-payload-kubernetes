@@ -89,7 +89,7 @@ spec:
         LUMI=11467.0 # Integrated luminosity of the unscaled dataset
         SCALE=0.1 # Same fraction as used to down-size the analysis
         mkdir -p $HOME/skimm
-        ./skim root://eospublic.cern.ch//eos/opendata/cms/derived-data/AOD2NanoAODOutreachTool/{{inputs.parameters.file}}.root $HOME/skimm/{{inputs.parameters.file}}-skimmed.root {{inputs.parameters.x-section}} $LUMI $SCALE
+        ./skim root://eospublic.cern.ch//eos/root-eos/HiggsTauTauReduced/{{inputs.parameters.file}}.root $HOME/skimm/{{inputs.parameters.file}}-skimmed.root {{inputs.parameters.x-section}} $LUMI $SCALE
         ls -l $HOME/skimm
         cp $HOME/skimm/* /mnt/vol
       volumeMounts:
